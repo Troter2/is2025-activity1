@@ -36,7 +36,7 @@ object Hondt {
     // quocients més grans i saber el partit que representen.
 
     def distribute[A, B](pr: (A, List[B])): List[(A, B)] =
-      val (key, values) = pr 
+      val (key, values) = pr
       values.map(value => (key, value))
 
 
