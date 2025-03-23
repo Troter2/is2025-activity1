@@ -34,29 +34,41 @@ object Hondt {
     // L'objectiu final serà marcar cadascun dels elements de la taula que he comentat abans amb
     // el partit que representen, ja que així, si ordeno la llista resultant, podré trobar els 
     // quocients més grans i saber el partit que representen.
-
-    def distribute[A, B](pr: (A, List[B])): List[(A, B)] =
+    def distribute[A, B](pr: (A, List[B])): List[(A, B)] = {
       val (key, values) = pr
       values.map(value => (key, value))
+    }
 
 
     // Transformarem el map inicial dels vots en un map que, per cada partit
     // contindrà la llista dels quocients.
-    val quotientsByParty: Map[String, List[Double]] = ???
+    val quotientsByParty: Map[String, List[Double]] =
+      votes.map { case (party, votes) => (party, quotients(votes)) }
+
 
     // Ara convertirem el Map anterior en una llista de parelles que contindrà
     // tots els valors de la taula (els quocients) amb el partit a que es corresponen.
-    val allQuotients: List[(String, Double)] = ???
+    val allQuotients: List[(String, Double)] =
+      quotientsByParty.flatMap { case (key, values) =>
+        values.map(value => (key, value)) // Para cada valor, crea una tupla con la clave
+      }.toList
+
 
     // Una vegada tenim tots els quocients, els ordenem en ordre decreixent
     // Pista: use sortBy i passeu una funció que, donada una parella retorna el
     // valor a considerar (com voleu ordenació decreixent canvieu-li el signe)
-    val sortedQuotients: List[(String, Double)] = ???
+    val sortedQuotients: List[(String, Double)] =
+      allQuotients.sortBy { case (_, value) => value }(Ordering[Double].reverse)
+
+
 
     // Agafem tants elements de la llista anterior com escons a repartir
-    val selected: List[(String, Double)] = ???
+    val selected: List[(String, Double)] = sortedQuotients.reverse.take(seats)
 
     // I, finalment, comptem els partits a què corresponen aquests escons
-    ???
+    val seatCount: Map[String, Int] =
+      selected.groupBy(_._1).map { case (party, pairs) => (party, pairs.size) }
+    print(selected)
+    seatCount
   }
 }
