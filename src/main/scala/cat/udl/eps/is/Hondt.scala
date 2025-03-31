@@ -49,16 +49,16 @@ object Hondt {
     // Ara convertirem el Map anterior en una llista de parelles que contindrà
     // tots els valors de la taula (els quocients) amb el partit a que es corresponen.
     val allQuotients: List[(String, Double)] =
-      quotientsByParty.flatMap { case (key, values) =>
-        values.map(value => (key, value)) // Para cada valor, crea una tupla con la clave
-      }.toList
+      quotientsByParty.toList.flatMap { case (key, values) =>
+        values.map(value => (key, value))
+      }
 
 
     // Una vegada tenim tots els quocients, els ordenem en ordre decreixent
     // Pista: use sortBy i passeu una funció que, donada una parella retorna el
     // valor a considerar (com voleu ordenació decreixent canvieu-li el signe)
     val sortedQuotients: List[(String, Double)] =
-      allQuotients.sortBy { case (_, value) => value }(Ordering[Double].reverse)
+      allQuotients.sortBy { case (_, value) => value }(Ordering[Double])
 
 
 
